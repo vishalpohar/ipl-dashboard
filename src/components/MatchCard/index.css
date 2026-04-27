@@ -1,0 +1,46 @@
+.text-green {
+  color: #18ed66;
+}
+
+.text-red {
+  color: #e31a1a;
+}
+
+.match-item-card {
+  font-family: 'Bree Serif';
+  background-color: #0f172a;
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.team-logo {
+  width: 60px;
+  height: 60px;
+}
+
+.team-name {
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.match-result {
+  text-align: center;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+@media screen and (min-width: 768px) {
+  .match-item-card {
+    width: 30%;
+  }
+
+  .team-logo {
+    width: 120px;
+    height: 120px;
+  }
+}
