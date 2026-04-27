@@ -6,28 +6,57 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
+  padding: 10px 20px;
+}
+
+.link-element {
+  margin: 10px auto 20px 0px;
+}
+
+.back-btn {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  outline: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 8px 16px;
+}
+
+.back-btn:hover {
+  background-color: #ffffff;
+  color: inherit;
+}
+
+.team-match-details {
+  flex: 1;
+  width: 90%;
+  max-width: 800px;
 }
 
 .team-banner {
   width: 100%;
-  max-width: 800px;
 }
 
 .latest-match-title {
   width: 100%;
-  max-width: 800px;
   color: #ffffff;
 }
 
 .recent-matches-container {
   list-style: none;
   width: 100%;
-  max-width: 800px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
   gap: 30px;
   padding: 20px 0;
+}
+
+.loader-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

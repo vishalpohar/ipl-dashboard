@@ -1,8 +1,10 @@
 import {Component} from 'react'
+import {Link} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 
 import LatestMatch from '../LatestMatch'
 import MatchCard from '../MatchCard'
+import PieChartStats from '../PieChartStats'
 
 import './index.css'
 
@@ -23,16 +25,32 @@ class TeamMatches extends Component {
     latestMatchDetails: {},
     recentMatches: [],
     isLoading: true,
+    stats: {won: 0, lost: 0, drawn: 0},
   }
 
   componentDidMount() {
     this.fetchTeamRecentMatches()
   }
 
+  getStats = matches => {
+    let won = 0
+    let lost = 0
+    let drawn = 0
+
+    matches.forEach(match => {
+      if (match.matchStatus === 'Won') won += 1
+      else if (match.matchStatus === 'Lost') lost += 1
+      else drawn += 1
+    })
+
+    return {won, lost, drawn}
+  }
+
   fetchTeamRecentMatches = async () => {
     const {match} = this.props
     const response = await fetch(`https://apis.ccbp.in/ipl/${match.params.id}`)
     const data = await response.json()
+    console.log(data)
     const {
       team_banner_url: teamBannerUrl,
       latest_match_details: latestMatchDetails,
@@ -59,20 +77,28 @@ class TeamMatches extends Component {
       matchStatus: matchDetails.match_status,
     }))
 
+    const stats = this.getStats(updatedRecentMatches)
+
     this.setState({
       teamBannerUrl,
       latestMatchDetails: updatedLatestMatchDetails,
       recentMatches: updatedRecentMatches,
+      stats,
       isLoading: false,
     })
   }
 
   render() {
-    const {teamBannerUrl, latestMatchDetails, recentMatches} = this.state
+    const {teamBannerUrl, latestMatchDetails, recentMatches, stats} = this.state
     const {isLoading} = this.state
     const {match} = this.props
     const {params} = match
-    const {gradientColor1, gradientColor2} = bgTeamGradientColors[params.id]
+    const {gradientColor1, gradientColor2} = bgTeamGradientColors[
+      params.id
+    ] || {
+      gradientColor1: '#000000',
+      gradientColor2: '#000000',
+    }
     return (
       <div
         className="team-matches-container"
@@ -81,23 +107,40 @@ class TeamMatches extends Component {
         }}
       >
         {isLoading ? (
-          <div data-testid="loader">
+          <div data-testid="loader" className="loader-container">
             <Loader type="Oval" color="#ffffff" height={50} width={50} />
           </div>
         ) : (
           <>
-            <img
-              className="team-banner"
-              src={teamBannerUrl}
-              alt="team banner"
-            />
-            <p className="latest-match-title">Latest Matches</p>
-            <LatestMatch latestMatchDetails={latestMatchDetails} />
-            <ul className="recent-matches-container">
-              {recentMatches.map(matchDetails => (
-                <MatchCard key={matchDetails.id} matchDetails={matchDetails} />
-              ))}
-            </ul>
+            <Link to="/" className="link-element">
+              <button type="button" className="back-btn">
+                Back
+              </button>
+            </Link>
+            <div className="team-match-details">
+              <img
+                className="team-banner"
+                src={teamBannerUrl}
+                alt="team banner"
+              />
+              <p className="latest-match-title">Latest Matches</p>
+              <LatestMatch latestMatchDetails={latestMatchDetails} />
+
+              <PieChartStats
+                won={stats.won}
+                lost={stats.lost}
+                drawn={stats.drawn}
+              />
+
+              <ul className="recent-matches-container">
+                {recentMatches.map(matchDetails => (
+                  <MatchCard
+                    key={matchDetails.id}
+                    matchDetails={matchDetails}
+                  />
+                ))}
+              </ul>
+            </div>
           </>
         )}
       </div>
